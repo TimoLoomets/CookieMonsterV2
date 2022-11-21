@@ -158,9 +158,38 @@ if (DEFINED MCU)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/VL53L1XExtended/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
   add_library(VL53L1XExtended STATIC ${LIB_VL53L1XEXTENDED})
   target_link_libraries(VL53L1XExtended
-      PRIVATE
-      core
-    )
+    PRIVATE
+    core
+  )
+
+  #PWMServo
+  file(GLOB_RECURSE LIB_PWMSERVO ${CMAKE_CURRENT_SOURCE_DIR}/custom/PWMServo/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/PWMServo/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/PWMServo/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(PWMServo STATIC ${LIB_PWMSERVO})
+  target_link_libraries(PWMServo
+    PRIVATE
+    core
+  )
+
+  #Encoder
+  file(GLOB_RECURSE LIB_ENCODER ${CMAKE_CURRENT_SOURCE_DIR}/custom/Encoder/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/Encoder/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/Encoder/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(Encoder STATIC ${LIB_ENCODER})
+  target_link_libraries(Encoder
+    PRIVATE
+    core
+  )
+
+  #CookieMonsterDrive
+  file(GLOB_RECURSE LIB_COOKIEMONSTERDRIVE ${CMAKE_CURRENT_SOURCE_DIR}/custom/CookieMonsterDrive/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/CookieMonsterDrive/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/CookieMonsterDrive/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(CookieMonsterDrive STATIC ${LIB_COOKIEMONSTERDRIVE})
+  target_link_libraries(CookieMonsterDrive
+    PRIVATE
+    core
+    PWMServo
+    Encoder
+  )
 
   # Example if this project is built separately
   if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
@@ -185,7 +214,7 @@ if (DEFINED MCU)
 
     add_executable(blink custom/blink.cpp)
     # Add the includes
-    target_include_directories(TOF_test PUBLIC 
+    target_include_directories(blink PUBLIC 
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
       $<INSTALL_INTERFACE:include>
@@ -196,7 +225,38 @@ if (DEFINED MCU)
       core
     )
     # Add hex and upload targets
-    include(${mcu_support_SOURCE_DIR}/cmake/flash_mcu.cmake)
     FlashMcu(blink ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(servo_test custom/servo.cpp)
+    # Add the includes
+    target_include_directories(servo_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(servo_test
+      PRIVATE
+      core
+      PWMServo
+    )
+    # Add hex and upload targets
+    FlashMcu(servo_test ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(encoder_test custom/encoder_test.cpp)
+    # Add the includes
+    target_include_directories(encoder_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(encoder_test
+      PRIVATE
+      core
+      CookieMonsterDrive
+    )
+    # Add hex and upload targets
+    FlashMcu(encoder_test ${MCU} ${mcu_support_SOURCE_DIR})
   endif()
 endif()

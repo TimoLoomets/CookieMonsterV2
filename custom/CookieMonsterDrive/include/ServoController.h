@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include <Arduino.h>
+#include <core/core.h>
 #include <PWMServo.h>
 
 #include <CookieMonsterDrive.h>

@@ -56,7 +56,7 @@ void DualMAX14870MotorShield::setM1Speed(int16_t speed)
 {
   init(); // initialize if necessary
 
-  boolean reverse = 0;
+  bool reverse = 0;
 
   if (speed < 0)
   {
@@ -90,7 +90,7 @@ void DualMAX14870MotorShield::setM2Speed(int16_t speed)
 {
   init(); // initialize if necessary
 
-  boolean reverse = 0;
+  bool reverse = 0;
 
   if (speed < 0)
   {

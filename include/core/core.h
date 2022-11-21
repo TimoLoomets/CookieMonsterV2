@@ -21,6 +21,10 @@
 #ifndef CORE_CORE_H_
 #define CORE_CORE_H_
 
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
+
 /* Teensy 3.x series */
 #if defined(__MK20DX128__) 	|| defined(__MK20DX256__) || defined(__MK64FX512__)	|| defined(__MK66FX1M0__) || defined(__MKL26Z64__)
   #include "teensy3x/core.h"

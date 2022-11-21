@@ -3,9 +3,7 @@
 #include <functional>
 
 void interrupt0() {
-  // Serial.print("INTERRUPT ");
   VL53L1XExtended::sensors[0].distance = VL53L1XExtended::sensors[0].readWithoutReset();
-  // Serial.println(VL53L1XExtended::sensors[0].distance);
 }
 
 void interrupt1() {

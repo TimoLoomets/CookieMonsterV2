@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
 
-#include <Arduino.h>
+#include <core/core.h>
 
 namespace CookieMonsterDrive
 {
