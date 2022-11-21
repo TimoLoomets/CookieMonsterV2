@@ -11,9 +11,7 @@ if (DEFINED MCU)
   # Setting up the toolchain
   set(CMAKE_TOOLCHAIN_FILE "${mcu_support_SOURCE_DIR}/cmake/cortex.cmake")
   # Project information
-  project(CORE 
-    VERSION 3.1.3
-    DESCRIPTION "Core files for BFS processors"
+  project(CookieMonsterV2
     LANGUAGES C CXX
   )
   # Grab the processor and set up definitions and compile options
@@ -154,18 +152,47 @@ if (DEFINED MCU)
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
   )
+
+  #VL53L1XExtended
+  file(GLOB_RECURSE LIB_VL53L1XEXTENDED ${CMAKE_CURRENT_SOURCE_DIR}/custom/VL53L1XExtended/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/VL53L1XExtended/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/VL53L1XExtended/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(VL53L1XExtended STATIC ${LIB_VL53L1XEXTENDED})
+  target_link_libraries(VL53L1XExtended
+      PRIVATE
+      core
+    )
+
   # Example if this project is built separately
   if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
+    include(${mcu_support_SOURCE_DIR}/cmake/flash_mcu.cmake)
+
     # Add the example target
-    add_executable(blink examples/blink.cc)
+    add_executable(TOF_test custom/TOF_test.cpp)
     # Add the includes
-    target_include_directories(blink PUBLIC 
+    target_include_directories(TOF_test PUBLIC 
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(TOF_test
+      PRIVATE 
+      core
+      VL53L1XExtended
+    )
+    # Add hex and upload targets
+    FlashMcu(TOF_test ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(blink custom/blink.cpp)
+    # Add the includes
+    target_include_directories(TOF_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
       $<INSTALL_INTERFACE:include>
     )
     # Link libraries to the test target
     target_link_libraries(blink
-      PRIVATE 
+      PRIVATE
       core
     )
     # Add hex and upload targets
