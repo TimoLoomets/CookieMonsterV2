@@ -258,5 +258,21 @@ if (DEFINED MCU)
     )
     # Add hex and upload targets
     FlashMcu(encoder_test ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(speed_control_test custom/speed_control_test.cpp)
+    # Add the includes
+    target_include_directories(speed_control_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(speed_control_test
+      PRIVATE
+      core
+      CookieMonsterDrive
+    )
+    # Add hex and upload targets
+    FlashMcu(speed_control_test ${MCU} ${mcu_support_SOURCE_DIR})
   endif()
 endif()

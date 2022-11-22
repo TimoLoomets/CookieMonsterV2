@@ -10,6 +10,8 @@ void AxleController::update(const unsigned long time_current, const bool allow_o
 
 void AxleController::set_M1_speed(double speed)
 {
+    // Serial.print("SETTING SPEED: ");
+    // Serial.println(speed);
     M1_controller.target_speed = speed;
 }
 
