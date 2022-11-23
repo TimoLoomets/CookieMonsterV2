@@ -2,7 +2,7 @@
 
 namespace CookieMonsterDrive
 {
-void AckermannController::update(const unsigned long time_current, const bool logging, const bool allow_overclocking)
+void AckermannController::update(const long time_current, const bool logging, const bool allow_overclocking)
 {
     if(logging)
     {
@@ -11,7 +11,7 @@ void AckermannController::update(const unsigned long time_current, const bool lo
         Serial.print(" turn_rate: ");
         Serial.println(turn_rate);
     }
-    double speeds[4] = {speed, speed, speed, speed}; // front_right, front_left, rear_right, rear_left
+    std::array<double, 4> speeds = {speed, speed, speed, speed}; // front_right, front_left, rear_right, rear_left
     if (turn_rate == 0)
     {
         steering_controller.set_wheel_angle(0);
@@ -61,7 +61,7 @@ void AckermannController::update(const unsigned long time_current, const bool lo
         }
     }
 
-    if(logging)
+    if(1 || logging)
     {
         Serial.print("[ACKERMANN] speeds: ");
         Serial.print(speeds[0]);
@@ -75,13 +75,16 @@ void AckermannController::update(const unsigned long time_current, const bool lo
     }
 
     double speed_sign = speed < 0 ? -1 : 1;
-
-    front_controller.set_M1_speed(speed_sign * std::abs(speeds[0]));
-    front_controller.set_M2_speed(speed_sign * std::abs(speeds[1]));
-    rear_controller.set_M1_speed(speed_sign * std::abs(speeds[2]));
-    rear_controller.set_M2_speed(speed_sign * std::abs(speeds[3]));
-
+    
+    front_controller.M1_controller.target_speed = speed_sign * std::abs(speeds[0]);
+    front_controller.M2_controller.target_speed = speed_sign * std::abs(speeds[1]);
+    rear_controller.M1_controller.target_speed = speed_sign * std::abs(speeds[2]);
+    rear_controller.M2_controller.target_speed = speed_sign * std::abs(speeds[3]);
+    
+    
     front_controller.update(time_current, allow_overclocking);
+    
     rear_controller.update(time_current, allow_overclocking);
+    /**/
 }
 } // namespace CookieMonsterDrive

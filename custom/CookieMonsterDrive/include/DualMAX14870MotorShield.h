@@ -27,7 +27,7 @@ class DualMAX14870MotorShield
     void enableDrivers();
     void disableDrivers();
 
-  private:
+  public:
     void initPinsAndMaybeTimer();
 
     uint8_t _nEN;

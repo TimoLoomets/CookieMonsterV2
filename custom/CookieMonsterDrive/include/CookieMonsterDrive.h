@@ -15,6 +15,12 @@ struct encoder_pins_t
     uint8_t encoder_pin_2;
 };
 
+struct encoder_configuration_t
+{
+    encoder_pins_t pins;
+    int direction = 1;
+};
+
 struct motor_controller_pins_t
 {
     uint8_t M1_dir;

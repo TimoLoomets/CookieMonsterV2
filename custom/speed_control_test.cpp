@@ -1,8 +1,8 @@
 #include <core/core.h>
 #include <AxleController.h>
 
-CookieMonsterDrive::AxleController rear_axle{{40, 22, 39, 23}, {32, 33}, {34, 41}};
-CookieMonsterDrive::AxleController front_axle{{7, 25, 8, 24}, {2, 3}, {5, 4}};
+CookieMonsterDrive::AxleController rear_axle{{40, 22, 39, 23}, {32, 33}, {34, 41, -1}};
+CookieMonsterDrive::AxleController front_axle{{7, 25, 8, 24}, {2, 3, -1}, {5, 4}};
 
 void test_axle(CookieMonsterDrive::AxleController* axle)
 {
@@ -63,8 +63,8 @@ void test_axle(CookieMonsterDrive::AxleController* axle)
 void setup() {
   Serial.begin(9600);
 
-  front_axle.M2_controller.step_direction = -1;
-  rear_axle.M1_controller.step_direction = -1;
+  //front_axle.M2_controller.step_direction = -1;
+  //rear_axle.M1_controller.step_direction = -1;
 }
 
 void loop() {

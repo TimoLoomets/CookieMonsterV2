@@ -29,10 +29,10 @@ void DualMAX14870MotorShield::initPinsAndMaybeTimer()
   digitalWrite(_M1DIR, LOW);
   pinMode(_M2DIR, OUTPUT);
   digitalWrite(_M2DIR, LOW);
-  pinMode(_nEN, OUTPUT);
-  digitalWrite(_nEN, LOW); // default to on
-  pinMode(_nFAULT, INPUT_PULLUP);
-
+  // pinMode(_nEN, OUTPUT);
+  // digitalWrite(_nEN, LOW); // default to on
+  // pinMode(_nFAULT, INPUT_PULLUP);
+/*
 #ifdef DUALMAX14870MOTORSHIELD_TIMER1_AVAILABLE
   if (_M1PWM == _M1PWM_TIMER1_PIN && _M2PWM == _M2PWM_TIMER1_PIN)
   {
@@ -49,6 +49,7 @@ void DualMAX14870MotorShield::initPinsAndMaybeTimer()
     ICR1 = 400;
   }
 #endif
+*/
 }
 
 // speed should be a number between -400 and 400
@@ -65,7 +66,7 @@ void DualMAX14870MotorShield::setM1Speed(int16_t speed)
   }
   if (speed > 400)  // max
     speed = 400;
-
+/*
 #ifdef DUALMAX14870MOTORSHIELD_TIMER1_AVAILABLE
   if (_M1PWM == _M1PWM_TIMER1_PIN && _M2PWM == _M2PWM_TIMER1_PIN)
   {
@@ -75,9 +76,9 @@ void DualMAX14870MotorShield::setM1Speed(int16_t speed)
   {
     analogWrite(_M1PWM, speed * 51 / 80); // map 400 to 255
   }
-#else
+#else*/
   analogWrite(_M1PWM, speed * 51 / 80); // map 400 to 255
-#endif
+// #endif
 
   if (reverse ^ _flipM1) // flip if speed was negative or _flipM1 setting is active, but not both
     digitalWrite(_M1DIR, HIGH);

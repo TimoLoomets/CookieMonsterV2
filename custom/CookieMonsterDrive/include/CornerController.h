@@ -17,7 +17,7 @@ public:
     std::function<void(int16_t)> set_speed; // -400...400
 
     int32_t encoder_last = 0;
-    unsigned long time_last = 0; // ms
+    long time_last = 0; // ms
     double radius = 1;           // m
     double gearbox_ratio = 1;
     double encoder_ticks_per_rotation = 1;
@@ -44,6 +44,6 @@ public:
     {
     }
 
-    void update(const unsigned long time_current, const bool allow_overclocking = false);    
+    void update(const long time_current, const bool allow_overclocking = false);    
 };
 } // namespace CookieMonsterDrive

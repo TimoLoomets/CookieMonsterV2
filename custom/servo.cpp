@@ -11,7 +11,7 @@ void setup()
   pinMode(13, OUTPUT);
   Serial.println("Start setup");
   Serial.begin(115200);
-  myservo.attach(0);  // attaches the servo on pin 20
+  myservo.attach(0);
   Serial.println("Done setup");
 } 
  

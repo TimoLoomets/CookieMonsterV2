@@ -1,5 +1,8 @@
 # v3.14 required for FetchContent_MakeAvailable
 cmake_minimum_required(VERSION 3.14)
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_STANDARD 20)
+
 if (DEFINED MCU)
   include(FetchContent)
 	FetchContent_Declare(
@@ -191,6 +194,15 @@ if (DEFINED MCU)
     Encoder
   )
 
+  #TeensyDebug
+  file(GLOB_RECURSE LIB_TEENSYDEBUG ${CMAKE_CURRENT_SOURCE_DIR}/custom/TeensyDebug/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/TeensyDebug/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/TeensyDebug/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(TeensyDebug STATIC ${LIB_TEENSYDEBUG})
+  target_link_libraries(TeensyDebug
+    PRIVATE
+    core
+  )
+
   # Example if this project is built separately
   if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     include(${mcu_support_SOURCE_DIR}/cmake/flash_mcu.cmake)
@@ -274,5 +286,39 @@ if (DEFINED MCU)
     )
     # Add hex and upload targets
     FlashMcu(speed_control_test ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(ackermann_test custom/ackermann_test.cpp)
+    # Add the includes
+    target_include_directories(ackermann_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(ackermann_test
+      PRIVATE
+      core
+      CookieMonsterDrive
+      TeensyDebug
+    )
+    # Add hex and upload targets
+    FlashMcu(ackermann_test ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(slip_test custom/slip_test.cpp)
+    # Add the includes
+    target_include_directories(slip_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(slip_test
+      PRIVATE
+      core
+      CookieMonsterDrive
+      TeensyDebug
+    )
+    # Add hex and upload targets
+    FlashMcu(slip_test ${MCU} ${mcu_support_SOURCE_DIR})
   endif()
 endif()
