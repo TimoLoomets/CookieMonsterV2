@@ -18,10 +18,10 @@ void CornerController::update(const long time_current, const bool allow_overcloc
         if (time_diff != 0)
         {
             
-            // Serial.print("Encoder diff: ");
-            // Serial.println(encoder_diff);
-            // Serial.print("time diff: ");
-            // Serial.println((int) time_diff);
+            Serial.print("Encoder diff: ");
+            Serial.println(encoder_diff);
+            Serial.print("time diff: ");
+            Serial.println((int) time_diff);
 
             // Serial.print("encoder_ticks_per_rotation: ");
             // Serial.println(encoder_ticks_per_rotation);

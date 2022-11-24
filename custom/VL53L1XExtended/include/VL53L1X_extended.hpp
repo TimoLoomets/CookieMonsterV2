@@ -11,7 +11,8 @@ class VL53L1XExtended : public VL53L1X
 
   public:
   static std::array<VL53L1XExtended, 5> sensors;
-  int distance;
+  volatile int distance = 0;
+  volatile long last_successful_time = 0;
 
   VL53L1XExtended(int shutpin, uint8_t address);
   VL53L1XExtended(int shutpin, int interrupt_pin, uint8_t address, void (*interrupt_function)());

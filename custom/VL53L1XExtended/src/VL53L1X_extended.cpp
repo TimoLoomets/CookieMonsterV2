@@ -23,11 +23,11 @@ void interrupt4() {
 }
 
 std::array<VL53L1XExtended, 5> VL53L1XExtended::sensors = {{
-    {9, 10, 0b0000010, interrupt1} // FR
-    , {35, 36, 0b0000101, interrupt4} // L
-    , {12, 11, 0b0000011, interrupt2} // M
-    , {37, 38, 0b0000001, interrupt0} // R
-    , {31, 30, 0b0000100, interrupt3} // FL
+    {9, 10, 0b0000010, interrupt0} // FR
+    , {12, 11, 0b0000011, interrupt1} // M
+    , {37, 38, 0b0000001, interrupt2} // R
+    , {35, 36, 0b0000101, interrupt3} // L
+    , {31, 30, 0b0000100, interrupt4} // FL
   }};
 
 VL53L1XExtended::VL53L1XExtended(int shutpin, uint8_t address) : VL53L1XExtended(shutpin, -1, address, nullptr)
@@ -120,6 +120,14 @@ void VL53L1XExtended::clearInterrupt()
 
 int VL53L1XExtended::readWithoutReset()
 {
+  //cli();
+  /*if(!dataReady())
+  {
+    return ranging_data.range_mm;
+  }*/
+
+  last_successful_time = millis();
+
   readResults();
 
   if (!calibrated)
@@ -133,6 +141,7 @@ int VL53L1XExtended::readWithoutReset()
   getRangingData();
 
   //writeReg(SYSTEM__INTERRUPT_CLEAR, 0x01); // sys_interrupt_clear_range
-
+  //sei();
+  clearInterrupt();
   return ranging_data.range_mm;
 }

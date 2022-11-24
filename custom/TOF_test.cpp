@@ -82,7 +82,7 @@ int main() {
     deelay = millis();
     // Serial.println("LOOP START");
     // digitalWriteFast(13, HIGH);
-    delay(75);
+    delay(100);
     // digitalWriteFast(13, LOW);
     // delay(200);
     // digitalWriteFast(13, HIGH);
@@ -93,6 +93,16 @@ int main() {
       VL53L1XExtended& sensor = VL53L1XExtended::sensors[i];
       // int distance = sensor.distance;
       Serial.print(sensor.distance);
+      Serial.print(" ");
+    }
+    Serial.println();
+
+    Serial.print("AGE ");
+    for(int i=0; i < VL53L1XExtended::sensors.size(); i++)
+    {
+      VL53L1XExtended& sensor = VL53L1XExtended::sensors[i];
+      // int distance = sensor.distance;
+      Serial.print(deelay - sensor.last_successful_time);
       Serial.print(" ");
     }
     Serial.println();

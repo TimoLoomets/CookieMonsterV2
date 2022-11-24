@@ -15,9 +15,9 @@ int main()
     const int switch_pin = 6;
     pinMode(6, switch_pin);
 
-    CookieMonsterDrive::AckermannController controller{{{7, 25, 8, 24}, {3, 2, -1}, {4, 5, 1}}
+    CookieMonsterDrive::AckermannController controller{{{7, 25, 8, 24}, {2, 3, -1}, {5, 4, 1}}
                                                  , {{39, 23, 40, 22}, {34, 41, -1}, {32, 33, 1}}
-                                                 , {0, 60, 135}};
+                                                 , {0, 65, 145}};
 
     /*
     CookieMonsterDrive::AxleController rear_axle{{39, 23, 40, 22}, {34, 41, -1}, {32, 33}};
@@ -112,8 +112,9 @@ int main()
             controller.update(current_time);
         }
 
-        /*if(logging)
+        if(logging)
         {
+            /*
             Serial.print("Encoder: ");
             Serial.print(controller.front_controller.M1_controller.encoder.read());
             Serial.print(" ");
@@ -122,7 +123,16 @@ int main()
             Serial.print(controller.rear_controller.M1_controller.encoder.read());
             Serial.print(" ");
             Serial.println(controller.rear_controller.M2_controller.encoder.read());
-        }*/
+            */
+            Serial.print("Speeds: ");
+            Serial.print(controller.front_controller.M1_controller.current_speed);
+            Serial.print(" ");
+            Serial.print(controller.front_controller.M2_controller.current_speed);
+            Serial.print(" ");
+            Serial.print(controller.rear_controller.M1_controller.current_speed);
+            Serial.print(" ");
+            Serial.println(controller.rear_controller.M2_controller.current_speed);
+        }
 
         delay(10);
         for(auto& sensor : VL53L1XExtended::sensors)

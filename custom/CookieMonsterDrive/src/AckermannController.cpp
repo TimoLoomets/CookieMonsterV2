@@ -32,7 +32,7 @@ void AckermannController::update(const long time_current, const bool logging, co
             Serial.print(" turn_angle: ");
             Serial.print(turn_angle);
         }
-        steering_controller.set_wheel_angle(-turn_angle);
+        steering_controller.set_wheel_angle(turn_angle);
         turn_radius = wheel_base / tan(turn_angle); // m
         if(logging)
         {

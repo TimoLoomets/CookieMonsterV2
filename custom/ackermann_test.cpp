@@ -10,7 +10,7 @@ int main()
 
     CookieMonsterDrive::AckermannController controller{{{7, 25, 8, 24}, {3, 2, -1}, {4, 5, 1}}
                                                  , {{39, 23, 40, 22}, {34, 41, -1}, {32, 33, 1}}
-                                                 , {0, 60, 135}};
+                                                 , {0, 65, 145}};
 
 CookieMonsterDrive::AxleController rear_axle{{40, 22, 39, 23}, {32, 33}, {34, 41, -1}};
 CookieMonsterDrive::AxleController front_axle{{7, 25, 8, 24}, {2, 3, -1}, {5, 4}};
@@ -83,6 +83,15 @@ CookieMonsterDrive::AxleController front_axle{{7, 25, 8, 24}, {2, 3, -1}, {5, 4}
         controller.update(millis(), true);
 
         delay(3000);
-        
+
+        Serial.println("Turn test 2");
+        controller.speed = 0.2;
+        controller.turn_rate = -10;
+        test_start = millis();
+        while(millis() - test_start < test_duration_millis)
+        {
+            controller.update(millis(), true);
+            delay(10);
+        }
     }
 }
