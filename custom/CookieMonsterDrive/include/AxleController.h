@@ -26,7 +26,6 @@ public:
         , M1_controller(M1_encoder_pins, std::bind(&DualMAX14870Extended::setM1Speed, &motor_controller, std::placeholders::_1))
         , M2_controller(M2_encoder_pins, std::bind(&DualMAX14870Extended::setM2Speed, &motor_controller, std::placeholders::_1))
     {
-        while(0) Serial.println("kys");
     }
 
     AxleController(axle_pins_t axle_pins)
@@ -45,6 +44,22 @@ public:
     {
         M1_controller.step_direction = M1_encoder.direction;
         M2_controller.step_direction = M2_encoder.direction;
+    }
+
+    AxleController(const AxleController& controller)
+    : AxleController({controller.motor_controller._M1DIR, controller.motor_controller._M1PWM, controller.motor_controller._M2DIR, controller.motor_controller._M2PWM}
+                     , {{controller.M1_controller.encoder.pin1, controller.M1_controller.encoder.pin2}, controller.M1_controller.step_direction}
+                     , {{controller.M2_controller.encoder.pin1, controller.M2_controller.encoder.pin2}, controller.M2_controller.step_direction})
+    {
+    }
+
+    AxleController& operator=(AxleController other)
+    {
+        motor_controller=other.motor_controller;
+        M1_controller=other.M1_controller;
+        M2_controller=other.M2_controller;
+
+        return *this;
     }
 
     void set_M1_speed(double speed);

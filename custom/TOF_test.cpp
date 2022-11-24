@@ -74,6 +74,12 @@ int main() {
   // VL53L1XExtended::sensors[0].read();
   Serial.println("LOOP");
   while (1) {
+    static long deelay = millis();
+    long diff = millis() - deelay;
+    
+    Serial.print("Cycle duration: ");
+    Serial.println(diff);
+    deelay = millis();
     // Serial.println("LOOP START");
     // digitalWriteFast(13, HIGH);
     delay(75);

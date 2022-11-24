@@ -24,7 +24,6 @@ public:
         , rear_controller(rear_axle)
         , steering_controller(servo)
     {
-        
     }
 
     void update(const long time_current, const bool logging = false, const bool allow_overclocking = false);

@@ -4,9 +4,6 @@
 #include <AckermannController.h>
 #include <TeensyDebug.h>
 
-
-
-
 int main()
 {   
     Serial.begin(9600);
@@ -36,7 +33,7 @@ CookieMonsterDrive::AxleController front_axle{{7, 25, 8, 24}, {2, 3, -1}, {5, 4}
         Serial.println(test_count);
         Serial.println("Straight test");
         
-        controller.speed = 0.5;
+        controller.speed = 0.2;
         controller.turn_rate = 0;
         
         // rear_axle.M1_controller.target_speed = 0.5;
@@ -59,6 +56,8 @@ CookieMonsterDrive::AxleController front_axle{{7, 25, 8, 24}, {2, 3, -1}, {5, 4}
             Serial.print(millis() - test_start);
             Serial.print("/");
             Serial.println(test_duration_millis);
+            Serial.print("Speed: ");
+            Serial.println(controller.front_controller.M1_controller.current_speed);
         }
         test_count++;
 
@@ -70,8 +69,8 @@ CookieMonsterDrive::AxleController front_axle{{7, 25, 8, 24}, {2, 3, -1}, {5, 4}
 
         
         Serial.println("Turn test");
-        controller.speed = 0.5;
-        controller.turn_rate = 1;
+        controller.speed = 0.2;
+        controller.turn_rate = 10;
         test_start = millis();
         while(millis() - test_start < test_duration_millis)
         {

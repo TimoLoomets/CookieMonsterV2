@@ -203,6 +203,27 @@ if (DEFINED MCU)
     core
   )
 
+  #Interaction
+  file(GLOB_RECURSE LIB_INTERACTION ${CMAKE_CURRENT_SOURCE_DIR}/custom/Interaction/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/Interaction/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/Interaction/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(Interaction STATIC ${LIB_INTERACTION})
+  target_link_libraries(Interaction
+    PRIVATE
+    core
+  )
+
+  #Navigation
+  file(GLOB_RECURSE LIB_NAVIGATION ${CMAKE_CURRENT_SOURCE_DIR}/custom/Navigation/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/Navigation/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/Navigation/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(Navigation STATIC ${LIB_NAVIGATION})
+  target_link_libraries(Navigation
+    PRIVATE
+    core
+    CookieMonsterDrive
+    Interaction
+    VL53L1XExtended
+  )
+
   # Example if this project is built separately
   if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     include(${mcu_support_SOURCE_DIR}/cmake/flash_mcu.cmake)
@@ -235,6 +256,7 @@ if (DEFINED MCU)
     target_link_libraries(blink
       PRIVATE
       core
+      Interaction
     )
     # Add hex and upload targets
     FlashMcu(blink ${MCU} ${mcu_support_SOURCE_DIR})
@@ -320,5 +342,22 @@ if (DEFINED MCU)
     )
     # Add hex and upload targets
     FlashMcu(slip_test ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(driving custom/driving.cpp)
+    # Add the includes
+    target_include_directories(slip_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(driving
+      PRIVATE
+      core
+      Navigation
+      TeensyDebug
+    )
+    # Add hex and upload targets
+    FlashMcu(driving ${MCU} ${mcu_support_SOURCE_DIR})
   endif()
 endif()

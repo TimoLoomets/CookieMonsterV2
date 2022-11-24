@@ -61,7 +61,7 @@ void AckermannController::update(const long time_current, const bool logging, co
         }
     }
 
-    if(1 || logging)
+    if(logging)
     {
         Serial.print("[ACKERMANN] speeds: ");
         Serial.print(speeds[0]);

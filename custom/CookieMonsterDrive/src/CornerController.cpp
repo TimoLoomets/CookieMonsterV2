@@ -10,6 +10,11 @@ void CornerController::update(const long time_current, const bool allow_overcloc
         long time_diff = time_current - time_last;
         int32_t encoder_diff = encoder_current - encoder_last;
 
+        // Serial.print("Encoder: ");
+        // Serial.print(encoder_current);
+        // Serial.print(" ");
+        // Serial.println(encoder_last);
+
         if (time_diff != 0)
         {
             
@@ -53,26 +58,26 @@ void CornerController::update(const long time_current, const bool allow_overcloc
             
             
             double speed_error = current_speed - target_speed;
-            Serial.print("[CORNER] speed: ");
-            Serial.print(current_speed);
-            Serial.print(" ");
-            Serial.print(target_speed);
-            Serial.print(" ");
-            Serial.println(speed_error);
+            // Serial.print("[CORNER] speed: ");
+            // Serial.print(current_speed);
+            // Serial.print(" ");
+            // Serial.print(target_speed);
+            // Serial.print(" ");
+            // Serial.println(speed_error);
             // Serial.print("speed_step: ");
             // Serial.println(speed_step);
             
             double speed_limit = allow_overclocking ? absolute_speed_limit : safe_speed_limit;
             double step = speed_error * step_direction > 0 ? speed_step * 1.0 : speed_step * 1.5;
-            Serial.print("[CORNER] speed_step: ");
-            Serial.print(speed_step);
-            Serial.print(" ");
-            Serial.println(step);
+            // Serial.print("[CORNER] speed_step: ");
+            // Serial.print(speed_step);
+            // Serial.print(" ");
+            // Serial.println(step);
             
             speed = std::min(std::max(-step_direction * sign(speed_error) * step + speed // max(0.2, abs(speed_error)) * 
                                       , -speed_limit), speed_limit);
-            Serial.print("[CORNER] set speed: ");
-            Serial.println(speed);
+            //Serial.print("[CORNER] set speed: ");
+            //Serial.println(speed);
             // Serial.println();
             
             set_speed((int16_t) speed);

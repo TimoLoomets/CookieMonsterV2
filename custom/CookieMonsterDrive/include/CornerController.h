@@ -26,8 +26,8 @@ public:
     double current_speed = 0;
 
     double speed = 0; // -400...400
-    const double speed_step = 4.0;
     int step_direction = 1;
+    const double speed_step = 4.0;
     const int16_t absolute_speed_limit = 400;
     const int16_t safe_speed_limit = absolute_speed_limit * RECOMMENDED_VOLTAGE / MAX_VOLTAGE;
 
@@ -42,6 +42,30 @@ public:
         , gearbox_ratio(gearbox_ratio)
         , encoder_ticks_per_rotation(encoder_ticks_per_rotation)
     {
+        Serial.print("ENCODER PINS: ");
+        Serial.print(encoder_pins.encoder_pin_1);
+        Serial.print(" ");
+        Serial.println(encoder_pins.encoder_pin_2);
+    }
+
+    CornerController& operator=(CornerController other)
+    {
+        encoder = other.encoder;
+        set_speed = other.set_speed; // -400...400
+
+        encoder_last = other.encoder_last;
+        time_last = other.time_last; // ms
+        radius = other.radius;           // m
+        gearbox_ratio = other.gearbox_ratio;
+        encoder_ticks_per_rotation = other.encoder_ticks_per_rotation;
+
+        target_speed = other.target_speed; // m/s
+        current_speed = other.current_speed;
+
+        speed = other.speed; // -400...400
+        step_direction = other.step_direction;
+
+        return *this;
     }
 
     void update(const long time_current, const bool allow_overclocking = false);    
