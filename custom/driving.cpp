@@ -4,6 +4,7 @@
 #include <RGB_LED.h>
 #include <navigation.hpp>
 #include <memory>
+#include <deque>
 
 #include <TeensyDebug.h>
 
@@ -61,11 +62,11 @@ int main()
     const bool logging = true;
     const bool move = true;
 
-    std::shared_ptr<Task> next_task;
-    std::shared_ptr<Task> current_task;
+    //std::shared_ptr<Task> next_task;
+    std::deque<std::shared_ptr<Task>> tasks = {std::make_shared<StartTask>(&controller, indicator, tasks)};
 
-    current_task = std::make_shared<StraightTask>(&controller, indicator, next_task);
-    current_task->logging = logging;
+    //current_task = std::make_shared<StartTask>(&controller, indicator, next_task);
+    //current_task->logging = logging;
 
     while(1)
     {
@@ -82,11 +83,15 @@ int main()
 
         
         long current_time = millis();
-        if(current_task)
+        if(tasks.size() > 0)
         {
-            Serial.print("POINTER EXISTANCES: ");
-            Serial.println(current_task.use_count());
-            current_task->handle_task(current_time);
+            // Serial.print("POINTER EXISTANCES: ");
+            // Serial.println(current_task.use_count());
+            bool finished = tasks[0]->handle_task(current_time);
+            if(finished)
+            {
+                tasks.pop_front();
+            }
         }
         else if(logging)
         {
@@ -140,5 +145,19 @@ int main()
             sensor.clearInterrupt();        
         }
         indicator.refresh(current_time);
+
+        // Serial.print("MAIN LOOP POINTER ");
+        // Serial.println((int) next_task.get());
+        // if (next_task.use_count() > 0)
+        // {
+        //     if(logging)
+        //     {
+        //         Serial.println("NEXT TASK EXISTS");
+        //         Serial.print("USE COUNT ");
+        //         Serial.println(next_task.use_count());
+        //     }
+        //     current_task.swap(next_task);
+        //     // next_task = nullptr;
+        // }
     }
 }

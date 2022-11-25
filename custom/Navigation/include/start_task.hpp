@@ -6,17 +6,17 @@
 #include <memory>
 #include <deque>
 
-class StraightTask : public Task
+
+class StartTask : public Task
 {
 public:
     CookieMonsterDrive::AckermannController* controller;
     RGB_LED& indicator;
     std::deque<std::shared_ptr<Task>>& tasks;
     
-    long last_enough_distance_time = 0;
-    long reverse_until = 0;
+    long start_time = 0;
 
-    StraightTask(CookieMonsterDrive::AckermannController* controller, RGB_LED& indicator, std::deque<std::shared_ptr<Task>>& tasks)
+    StartTask(CookieMonsterDrive::AckermannController* controller, RGB_LED& indicator, std::deque<std::shared_ptr<Task>>& tasks)
         : controller(controller)
         , indicator(indicator)
         , tasks(tasks)

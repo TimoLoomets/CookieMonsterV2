@@ -2,9 +2,10 @@
 #include <core/core.h>
 #include <string.h>
 
-void Task::handle_task(const long current_time)
+bool Task::handle_task(const long current_time)
 {
     // log("TASK");
+    return false;
 }
 
 void Task::log(std::string msg)

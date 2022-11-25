@@ -2,13 +2,13 @@
 #include <VL53L1X_extended.hpp>
 #include <algorithm>
 
-void StraightTask::handle_task(const long current_time)
+bool StraightTask::handle_task(const long current_time)
 {
-    // log("STRAIGHT DRIVING TASK");
+    log("STRAIGHT DRIVING TASK");
 
-    if(VL53L1XExtended::sensors[2].distance > 150
-        && VL53L1XExtended::sensors[1].distance * cos(30 * CookieMonsterDrive::DEG2RAD) > 150
-        && VL53L1XExtended::sensors[3].distance * cos(30 * CookieMonsterDrive::DEG2RAD) > 150)
+    if(VL53L1XExtended::sensors[2].distance > 100
+        && VL53L1XExtended::sensors[1].distance * cos(30 * CookieMonsterDrive::DEG2RAD) > 100
+        && VL53L1XExtended::sensors[3].distance * cos(30 * CookieMonsterDrive::DEG2RAD) > 100)
     {
         // log("ENOUGH DISTANCE");
         last_enough_distance_time = current_time;
@@ -33,7 +33,7 @@ void StraightTask::handle_task(const long current_time)
         controller->turn_rate = 0;
         indicator.set_color(100, 0, 100);
         indicator.period_ms = 100;
-        return;
+        return false;
     }
     
     if(VL53L1XExtended::sensors[0].distance > 1000
@@ -42,11 +42,11 @@ void StraightTask::handle_task(const long current_time)
         && VL53L1XExtended::sensors[4].distance > 1000)
     {
         // log("STRAIGHT");
-        controller->speed = 0.45;
+        controller->speed = 0.75;
         controller->turn_rate = 0;
         indicator.set_color(0, 100, 100);
         indicator.period_ms = 1000;
-        return;
+        return false;
     }
 
     double max_turn_rate = 7.0;
@@ -71,7 +71,7 @@ void StraightTask::handle_task(const long current_time)
                 , VL53L1XExtended::sensors[3].distance
                 , VL53L1XExtended::sensors[4].distance});
 
-    controller->speed = std::clamp(min_distance / 100 * 0.1, 0.1, 0.5); //0.3;
+    controller->speed = std::clamp(min_distance / 100 * 0.1, 0.3, 0.75); //0.3;
     // log("CALCULATING MID DIFF");
     long mid_diff = std::clamp(VL53L1XExtended::sensors[3].distance - VL53L1XExtended::sensors[1].distance, -500, 500);
     // log("mid_diff: ", mid_diff);
@@ -85,4 +85,5 @@ void StraightTask::handle_task(const long current_time)
     controller->turn_rate = turn_rate;
     // log("DONE TURN RATE WRITE");
     //// log("turn_rate", controller->turn_rate);
+    return false;
 }
