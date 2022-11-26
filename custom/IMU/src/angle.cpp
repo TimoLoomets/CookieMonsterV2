@@ -4,7 +4,7 @@ void Angle::add_single(double& integral, int16_t measurement, double secs, doubl
 {
     // Serial.print("IMU MEASURE");
     // Serial.println(abs(measurement - bias));
-    integral += abs(measurement - bias) > 1000 ? (measurement - bias) * secs / 110: 0;
+    integral += abs(measurement - bias) > 1500 ? (measurement - bias) * secs / 110: 0;
 }
 
 void Angle::add_measurement(LSM6::vector<int16_t> measurement)

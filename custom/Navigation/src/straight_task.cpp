@@ -28,11 +28,11 @@ bool StraightTask::handle_task(const long current_time)
         last_enough_distance_time = current_time;
     }
 
-    if (current_time - last_even_ground_time > 500)
+    /*if (current_time - last_even_ground_time > 500)
     {
         tasks.push_back(std::make_shared<HillTask>(this));
         return true;
-    }
+    }*/
 
     // log("CHEKS BEGIN");
 
