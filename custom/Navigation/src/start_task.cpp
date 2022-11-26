@@ -17,7 +17,7 @@ bool StartTask::handle_task(const long current_time)
         log("SETTING NEXT TASK");
         // log("START TASK PTR ", (int) next_task.get());
         // next_task = std::make_shared<StraightTask>(controller, indicator, next_task);
-        tasks.push_back(std::make_shared<StraightTask>(controller, indicator, tasks));
+        tasks.push_back(std::make_shared<StraightTask>(this));
 
         return true;
     }

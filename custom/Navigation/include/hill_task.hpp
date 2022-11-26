@@ -9,17 +9,12 @@
 class HillTask : public Task
 {
 public:
-    CookieMonsterDrive::AckermannController* controller;
-    RGB_LED& indicator;
-    std::shared_ptr<Task> next_task;
-    
     long last_enough_distance_time = 0;
     long reverse_until = 0;
+    long start_time = 0;
 
-    HillTask(CookieMonsterDrive::AckermannController* controller, RGB_LED& indicator, std::shared_ptr<Task> next_task)
-        : controller(controller)
-        , indicator(indicator)
-        , next_task(next_task)
+    HillTask(Task * task)
+        : Task(task)
     {
     }
 

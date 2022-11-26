@@ -3,6 +3,8 @@
 #include <VL53L1X_extended.hpp>
 #include <RGB_LED.h>
 #include <navigation.hpp>
+#include <imu_wrapper.hpp>
+
 #include <memory>
 #include <deque>
 
@@ -10,11 +12,15 @@
 
 int main()
 {
+    delay(1000);
     RGB_LED indicator(16, 15, 17);
     indicator.set_color(0, 0, 100);
 
     const int switch_pin = 6;
     pinMode(6, switch_pin);
+
+    IMUWrapper imu;
+    imu.init();
 
     CookieMonsterDrive::AckermannController controller{{{7, 25, 8, 24}, {2, 3, -1}, {5, 4, 1}}
                                                  , {{39, 23, 40, 22}, {34, 41, -1}, {32, 33, 1}}
@@ -36,7 +42,7 @@ int main()
     }
     for(auto& sensor : VL53L1XExtended::sensors)
     {
-        sensor.init();
+        while(!sensor.init());
     }
 
     indicator.set_color(0, 100, 0);
@@ -59,11 +65,14 @@ int main()
     indicator.set_color(0, 0, 100);
     indicator.period_ms = 0;
 
-    const bool logging = true;
+    const bool logging = false;
     const bool move = true;
 
     //std::shared_ptr<Task> next_task;
-    std::deque<std::shared_ptr<Task>> tasks = {std::make_shared<StartTask>(&controller, indicator, tasks)};
+    std::deque<std::shared_ptr<Task>> tasks;
+    Task base_task(&controller, indicator, tasks, imu);
+    tasks.push_back(std::make_shared<StartTask>(&base_task));
+    imu.zero();
 
     //current_task = std::make_shared<StartTask>(&controller, indicator, next_task);
     //current_task->logging = logging;
@@ -80,9 +89,10 @@ int main()
             }
             Serial.println();
         }
-
-        
+                
         long current_time = millis();
+        imu.update(current_time);
+
         if(tasks.size() > 0)
         {
             // Serial.print("POINTER EXISTANCES: ");

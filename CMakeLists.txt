@@ -212,6 +212,15 @@ if (DEFINED MCU)
     core
   )
 
+  #IMU
+  file(GLOB_RECURSE LIB_IMU ${CMAKE_CURRENT_SOURCE_DIR}/custom/IMU/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/IMU/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/IMU/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(IMU STATIC ${LIB_IMU})
+  target_link_libraries(IMU
+    PRIVATE
+    core
+  )
+
   #Navigation
   file(GLOB_RECURSE LIB_NAVIGATION ${CMAKE_CURRENT_SOURCE_DIR}/custom/Navigation/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/Navigation/include/*.hpp)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/Navigation/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
@@ -222,6 +231,7 @@ if (DEFINED MCU)
     CookieMonsterDrive
     Interaction
     VL53L1XExtended
+    IMU
   )
 
   # Example if this project is built separately
@@ -343,6 +353,22 @@ if (DEFINED MCU)
     # Add hex and upload targets
     FlashMcu(slip_test ${MCU} ${mcu_support_SOURCE_DIR})
 
+    add_executable(IMU_test custom/IMU_test.cpp)
+    # Add the includes
+    target_include_directories(IMU_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/custom>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(IMU_test
+      PRIVATE
+      IMU
+      TeensyDebug
+    )
+    # Add hex and upload targets
+    FlashMcu(IMU_test ${MCU} ${mcu_support_SOURCE_DIR})
+
     add_executable(driving custom/driving.cpp)
     # Add the includes
     target_include_directories(slip_test PUBLIC 
@@ -355,6 +381,7 @@ if (DEFINED MCU)
       PRIVATE
       core
       Navigation
+      IMU
       TeensyDebug
     )
     # Add hex and upload targets

@@ -1,10 +1,24 @@
 #include <straight_task.hpp>
+#include <hill_task.hpp>
 #include <VL53L1X_extended.hpp>
 #include <algorithm>
 
 bool StraightTask::handle_task(const long current_time)
 {
     log("STRAIGHT DRIVING TASK");
+
+    const double plane_angle = acos(cos(imu.angle.x * CookieMonsterDrive::DEG2RAD) * cos(imu.angle.y * CookieMonsterDrive::DEG2RAD)) / CookieMonsterDrive::DEG2RAD;
+    Serial.print("X ");
+    Serial.println(imu.angle.x);
+    Serial.print("Y ");
+    Serial.println(imu.angle.y);
+    Serial.print("plane ");
+    Serial.println(plane_angle);
+    
+    if (plane_angle < 20)
+    {
+        last_even_ground_time = current_time;
+    }
 
     if(VL53L1XExtended::sensors[2].distance > 100
         && VL53L1XExtended::sensors[1].distance * cos(30 * CookieMonsterDrive::DEG2RAD) > 100
@@ -14,9 +28,17 @@ bool StraightTask::handle_task(const long current_time)
         last_enough_distance_time = current_time;
     }
 
+    if (current_time - last_even_ground_time > 500)
+    {
+        tasks.push_back(std::make_shared<HillTask>(this));
+        return true;
+    }
+
     // log("CHEKS BEGIN");
-    if(current_time - last_enough_distance_time > 200
-        && reverse_until == 0)
+
+    if(current_time - last_enough_distance_time > std::clamp(100 * 0.05 / controller->speed, 30.0, 200.0)
+        && reverse_until == 0
+        && current_time - last_reverse_time > 3000)
     {
         // log("TRIGGER REVERSING");
         reverse_until = current_time + 1000;
@@ -30,9 +52,17 @@ bool StraightTask::handle_task(const long current_time)
     {
         // log("REVERSING");
         controller->speed = -0.3;
-        controller->turn_rate = 0;
+
+        controller->turn_rate = std::clamp(VL53L1XExtended::sensors[0].distance - VL53L1XExtended::sensors[4].distance, -150, 150)
+                            / 150 * 7;
+
+
+        // controller->turn_rate = 0;
+        
+        
         indicator.set_color(100, 0, 100);
         indicator.period_ms = 100;
+        last_reverse_time = current_time;
         return false;
     }
     
@@ -71,7 +101,7 @@ bool StraightTask::handle_task(const long current_time)
                 , VL53L1XExtended::sensors[3].distance
                 , VL53L1XExtended::sensors[4].distance});
 
-    controller->speed = std::clamp(min_distance / 100 * 0.1, 0.3, 0.75); //0.3;
+    controller->speed = std::clamp(min_distance / 100 * 0.2, 0.3, 0.75);
     // log("CALCULATING MID DIFF");
     long mid_diff = std::clamp(VL53L1XExtended::sensors[3].distance - VL53L1XExtended::sensors[1].distance, -500, 500);
     // log("mid_diff: ", mid_diff);
