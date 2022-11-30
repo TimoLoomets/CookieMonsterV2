@@ -212,6 +212,15 @@ if (DEFINED MCU)
     core
   )
 
+  #Util
+  file(GLOB_RECURSE LIB_UTIL ${CMAKE_CURRENT_SOURCE_DIR}/custom/Util/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/Util/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/Util/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(Util STATIC ${LIB_UTIL})
+  target_link_libraries(Util
+    PRIVATE
+    core
+  )
+
   #IMU
   file(GLOB_RECURSE LIB_IMU ${CMAKE_CURRENT_SOURCE_DIR}/custom/IMU/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/custom/IMU/include/*.hpp)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/custom/IMU/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
@@ -219,6 +228,7 @@ if (DEFINED MCU)
   target_link_libraries(IMU
     PRIVATE
     core
+    Util
   )
 
   #Navigation

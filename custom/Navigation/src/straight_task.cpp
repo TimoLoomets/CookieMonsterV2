@@ -7,7 +7,7 @@ bool StraightTask::handle_task(const long current_time)
 {
     log("STRAIGHT DRIVING TASK");
 
-    const double plane_angle = acos(cos(imu.angle.x * CookieMonsterDrive::DEG2RAD) * cos(imu.angle.y * CookieMonsterDrive::DEG2RAD)) / CookieMonsterDrive::DEG2RAD;
+    const double plane_angle = imu.angle.smooth_level;//acos(cos(imu.angle.x * CookieMonsterDrive::DEG2RAD) * cos(imu.angle.y * CookieMonsterDrive::DEG2RAD)) / CookieMonsterDrive::DEG2RAD;
     Serial.print("X ");
     Serial.println(imu.angle.x);
     Serial.print("Y ");
@@ -15,7 +15,7 @@ bool StraightTask::handle_task(const long current_time)
     Serial.print("plane ");
     Serial.println(plane_angle);
     
-    if (plane_angle < 20)
+    if (plane_angle < 15)
     {
         last_even_ground_time = current_time;
     }
@@ -28,11 +28,11 @@ bool StraightTask::handle_task(const long current_time)
         last_enough_distance_time = current_time;
     }
 
-    /*if (current_time - last_even_ground_time > 500)
+    if (current_time - last_even_ground_time > 500)
     {
         tasks.push_back(std::make_shared<HillTask>(this));
         return true;
-    }*/
+    }
 
     // log("CHEKS BEGIN");
 
@@ -101,7 +101,7 @@ bool StraightTask::handle_task(const long current_time)
                 , VL53L1XExtended::sensors[3].distance
                 , VL53L1XExtended::sensors[4].distance});
 
-    controller->speed = std::clamp(min_distance / 100 * 0.2, 0.3, 0.75);
+    controller->speed = std::clamp(min_distance / 100 * 0.25 , 0.3, 1.0);
     // log("CALCULATING MID DIFF");
     long mid_diff = std::clamp(VL53L1XExtended::sensors[3].distance - VL53L1XExtended::sensors[1].distance, -500, 500);
     // log("mid_diff: ", mid_diff);

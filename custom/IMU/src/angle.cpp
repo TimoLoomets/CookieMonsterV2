@@ -1,4 +1,5 @@
 #include <angle.hpp>
+#include <algorithm>
 
 void Angle::add_single(double& integral, int16_t measurement, double secs, double bias)
 {
@@ -17,6 +18,14 @@ void Angle::add_measurement(LSM6::vector<int16_t> measurement)
         add_single(x, measurement.x, secs, x_bias);
         add_single(y, measurement.y, secs, y_bias);
         add_single(z, measurement.z, secs, z_bias);
+    }
+    level = acos(std::clamp(imu.a.z / 16384.0, 0.0, 1.0)) / Util::DEG2RAD;
+    level_buffer.push(level);
+    if(level_buffer.is_full())
+    {
+        auto b = level_buffer.buffer;//std::copy(level_buffer.buffer.begin(), level_buffer.buffer.end());
+        std::sort(b.begin(), b.end());
+        smooth_level = b[level_buffer.size / 2];
     }
     last_time = current_time;
 }

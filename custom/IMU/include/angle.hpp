@@ -1,5 +1,6 @@
 #pragma once
 #include <LSM6.h>
+#include <util.h>
 
 struct Angle
 {
@@ -8,7 +9,11 @@ struct Angle
   double x = 0;
   double y = 0;
   double z = 0;
+  double level=0;
   unsigned long last_time = 0;
+  Util::fifo_t<double, 5> level_buffer;
+  double smooth_level = 0;
+  
 
   double x_bias = 0;
   double y_bias = 0;

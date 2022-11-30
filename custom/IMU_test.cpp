@@ -82,6 +82,13 @@ void loop()
   Serial.print("Plane: ");
   Serial.println(plane_angle);
 
+  double acceleration_plane = acos(std::clamp(imu.imu.a.z / 16384.0, 0.0, 1.0)) / CookieMonsterDrive::DEG2RAD;
+  Serial.print("ACC ANGLE:");
+  Serial.println(acceleration_plane);
+
+  Serial.print("SMOOTH");
+  Serial.println(imu.angle.smooth_level);
+
   delay(10);
 }
 

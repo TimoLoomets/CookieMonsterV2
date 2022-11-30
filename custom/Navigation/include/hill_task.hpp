@@ -13,6 +13,9 @@ public:
     long reverse_until = 0;
     long start_time = 0;
 
+    bool reached_middle=false;
+    bool reached_lowering=false;
+
     HillTask(Task * task)
         : Task(task)
     {
