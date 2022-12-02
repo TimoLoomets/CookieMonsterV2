@@ -31,7 +31,7 @@
 #include "teensy4x/HardwareSerial.h"
 #include "teensy4x/core_pins.h"
 #include "teensy4x/pgmspace.h"
-// #include "Arduino.h"
+// #include "core.h"
 //#include "debug/printf.h"
 
 /*typedef struct {

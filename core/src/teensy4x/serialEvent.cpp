@@ -1,5 +1,5 @@
 
-// #include <Arduino.h>
+// #include <core.h>
 #include <cstdint>
 #include "teensy4x/pgmspace.h"
 

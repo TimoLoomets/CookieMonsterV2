@@ -165,6 +165,15 @@ if (DEFINED MCU)
     core
   )
 
+  #VL53L5CXExtended
+  file(GLOB_RECURSE LIB_VL53L5CXEXTENDED ${CMAKE_CURRENT_SOURCE_DIR}/libraries/VL53L5CXExtended/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/libraries/VL53L5CXExtended/include/*.hpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libraries/VL53L5CXExtended/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+  add_library(VL53L5CXExtended STATIC ${LIB_VL53L5CXEXTENDED})
+  target_link_libraries(VL53L5CXExtended
+    PRIVATE
+    core
+  )
+
   #PWMServo
   file(GLOB_RECURSE LIB_PWMSERVO ${CMAKE_CURRENT_SOURCE_DIR}/libraries/PWMServo/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/libraries/PWMServo/include/*.hpp)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libraries/PWMServo/include $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)

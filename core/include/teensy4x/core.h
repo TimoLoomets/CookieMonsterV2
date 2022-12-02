@@ -45,6 +45,7 @@
 #include "SPI.h"
 #include "WireIMXRT.h"
 #include "micros64.h"
+#include "bits.h"
 
 #define interrupts() __enable_irq()
 #define noInterrupts() __disable_irq()

@@ -34,7 +34,7 @@
 // developed for Teensyduino have made their way back into
 // Arduino's code base.  :-)
 
-// #include <Arduino.h>
+// #include <core.h>
 
 #include "teensy4x/Print.h"
 #include <math.h>

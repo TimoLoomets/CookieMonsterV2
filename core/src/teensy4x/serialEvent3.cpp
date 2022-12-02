@@ -1,5 +1,5 @@
 
-// #include <Arduino.h>
+// #include <core.h>
 #include "teensy4x/HardwareSerial.h"
 void serialEvent3() __attribute__((weak));
 void serialEvent3() {}		// No use calling this so disable if called...

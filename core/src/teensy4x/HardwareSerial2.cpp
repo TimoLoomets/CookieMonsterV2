@@ -28,7 +28,7 @@
  * SOFTWARE.
  */
 
-// #include <Arduino.h>
+// #include <core.h>
 #include "teensy4x/HardwareSerial.h"
 
 #ifndef SERIAL2_TX_BUFFER_SIZE

@@ -28,7 +28,7 @@
  * SOFTWARE.
  */
 
-// #include <Arduino.h>
+// #include <core.h>
 #include "teensy4x/usb_desc.h"
 #include "teensy4x/usb_serial.h"
 

@@ -31,7 +31,7 @@
  *     https://forum.pjrc.com/threads/44723-Arduino-Events
  */
 
-// #include <Arduino.h>
+// #include <core.h>
 #include "teensy4x/EventResponder.h"
 #include "teensy4x/pgmspace.h"
 

@@ -37,7 +37,7 @@
 #include <cstdint>
 #include "core_pins.h"
 
-// #include <Arduino.h>
+// #include <core.h>
 
 /* EventResponder lets you control how your program responds to an event.
  * Imagine a basketball or football (American soccer) player who gets the

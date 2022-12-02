@@ -30,7 +30,7 @@
 #if defined(__arm__) && defined(TEENSYDUINO) && (defined(__MKL26Z64__) || defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__))
 
 #include "core.h"
-// #include <Arduino.h>
+// #include <core.h>
 #include <stdint.h>
 
 #define BUFFER_LENGTH 32

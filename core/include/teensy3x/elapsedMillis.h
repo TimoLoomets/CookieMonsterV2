@@ -28,7 +28,7 @@
 #include "core_pins.h"
 
 // #if ARDUINO >= 100
-// #include "Arduino.h"
+// #include "core.h"
 // #else
 // #include "WProgram.h"
 // #endif

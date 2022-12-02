@@ -20,7 +20,7 @@
  parsing functions based on TextFinder library by Michael Margolis
  */
 
-// #include <Arduino.h>
+// #include <core.h>
 #include "teensy4x/Print.h"
 #include "teensy4x/Stream.h"
 #include "teensy4x/core_pins.h"
