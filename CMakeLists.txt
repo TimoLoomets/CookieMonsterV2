@@ -390,7 +390,7 @@ if (DEFINED MCU)
 
     add_executable(driving main/driving.cpp)
     # Add the includes
-    target_include_directories(slip_test PUBLIC 
+    target_include_directories(driving PUBLIC 
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
       $<INSTALL_INTERFACE:include>
@@ -405,5 +405,22 @@ if (DEFINED MCU)
     )
     # Add hex and upload targets
     FlashMcu(driving ${MCU} ${mcu_support_SOURCE_DIR})
+
+    add_executable(VL53L5CX_test main/VL53L5CX_test.cpp)
+    # Add the includes
+    target_include_directories(VL53L5CX_test PUBLIC 
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/main>
+      $<INSTALL_INTERFACE:include>
+    )
+    # Link libraries to the test target
+    target_link_libraries(VL53L5CX_test
+      PRIVATE
+      core
+      VL53L5CXExtended
+      TeensyDebug
+    )
+    # Add hex and upload targets
+    FlashMcu(VL53L5CX_test ${MCU} ${mcu_support_SOURCE_DIR})
   endif()
 endif()
